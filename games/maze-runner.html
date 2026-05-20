@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze Runner</title>
+    <style>
+      body {
+        margin: 0;
+        background: #0b1721;
+        color: #fff;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      #info {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        font-size: 14px;
+        color: #7dd3fc;
+      }
+      canvas {
+        display: block;
+        margin: 0 auto;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">Move with arrow keys to reach the star. Avoid the walls.</div>
+    <canvas id="game"></canvas>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const rows = 12;
+      const cols = 16;
+      const cellSize = 48;
+      canvas.width = cols * cellSize;
+      canvas.height = rows * cellSize;
+
+      const maze = [
+        '1111111111111111',
+        '1000000010000001',
+        '1011111010111101',
+        '1010001010100001',
+        '1010111010111101',
+        '1010000010000101',
+        '1011111110110101',
+        '1001000000100101',
+        '1111011111100101',
+        '1000010000000101',
+        '1011110111111101',
+        '1111111111111111'
+      ];
+
+      const player = { x: 1, y: 1 };
+      const target = { x: 14, y: 10 };
+      let message = '';
+
+      window.addEventListener('keydown', (e) => {
+        const moves = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+        if (!moves[e.key]) return;
+        const [dx, dy] = moves[e.key];
+        const nextX = player.x + dx;
+        const nextY = player.y + dy;
+        if (maze[nextY][nextX] === '0') {
+          player.x = nextX;
+          player.y = nextY;
+        }
+        if (player.x === target.x && player.y === target.y) {
+          message = 'You reached the star! Refresh to play again.';
+        }
+      });
+
+      function draw() {
+        ctx.fillStyle = '#07101c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            if (maze[y][x] === '1') {
+              ctx.fillStyle = '#1e3a5f';
+              ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(target.x * cellSize + 12, target.y * cellSize + 12, 24, 24);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(player.x * cellSize + cellSize / 2, player.y * cellSize + cellSize / 2, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '18px Inter, sans-serif';
+        ctx.fillText('Use arrow keys to move.', 16, 28);
+        if (message) {
+          ctx.fillText(message, 16, 56);
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

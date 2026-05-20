@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Shooter</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at top, #081028 0%, #000 80%);
+        color: #fff;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      #game {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+        background: #020712;
+      }
+      #info {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        font-size: 14px;
+        color: #a5f3fc;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">Use A/D or ←/→ to move. Press Space to shoot.</div>
+    <canvas id="game"></canvas>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const size = { width: 800, height: 600 };
+      canvas.width = size.width;
+      canvas.height = size.height;
+      let scale = 1;
+
+      function resize() {
+        const ratio = window.innerWidth / window.innerHeight;
+        const gameRatio = size.width / size.height;
+        if (ratio > gameRatio) {
+          scale = window.innerHeight / size.height;
+        } else {
+          scale = window.innerWidth / size.width;
+        }
+        canvas.style.width = size.width * scale + 'px';
+        canvas.style.height = size.height * scale + 'px';
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const ship = { x: size.width / 2, y: size.height - 60, radius: 14, speed: 6 };
+      const bullets = [];
+      const enemies = [];
+      let keys = {};
+      let score = 0;
+      let gameOver = false;
+
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 3; j++) {
+          enemies.push({ x: 80 + i * 90, y: 60 + j * 60, w: 50, h: 26, alive: true });
+        }
+      }
+
+      window.addEventListener('keydown', (e) => {
+        keys[e.key] = true;
+        if (e.key === ' ' || e.key === 'Spacebar') {
+          bullets.push({ x: ship.x, y: ship.y - 18, r: 5 });
+        }
+      });
+      window.addEventListener('keyup', (e) => {
+        keys[e.key] = false;
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, size.width, size.height);
+        ctx.fillStyle = '#091621';
+        ctx.fillRect(0, 0, size.width, size.height);
+
+        if (keys.ArrowLeft || keys.a) ship.x -= ship.speed;
+        if (keys.ArrowRight || keys.d) ship.x += ship.speed;
+        ship.x = Math.min(Math.max(ship.x, 24), size.width - 24);
+
+        bullets.forEach((bullet, index) => {
+          bullet.y -= 10;
+          ctx.fillStyle = '#7df9ff';
+          ctx.beginPath();
+          ctx.arc(bullet.x, bullet.y, bullet.r, 0, Math.PI * 2);
+          ctx.fill();
+          if (bullet.y < -10) bullets.splice(index, 1);
+        });
+
+        enemies.forEach((enemy) => {
+          if (!enemy.alive) return;
+          enemy.y += 0.02;
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+        });
+
+        bullets.forEach((bullet, bIndex) => {
+          enemies.forEach((enemy) => {
+            if (!enemy.alive) return;
+            if (
+              bullet.x > enemy.x &&
+              bullet.x < enemy.x + enemy.w &&
+              bullet.y > enemy.y &&
+              bullet.y < enemy.y + enemy.h
+            ) {
+              enemy.alive = false;
+              bullets.splice(bIndex, 1);
+              score += 10;
+            }
+          });
+        });
+
+        ctx.fillStyle = '#22d3ee';
+        ctx.beginPath();
+        ctx.moveTo(ship.x, ship.y - 18);
+        ctx.lineTo(ship.x - 14, ship.y + 14);
+        ctx.lineTo(ship.x + 14, ship.y + 14);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '18px Inter, sans-serif';
+        ctx.fillText('Score: ' + score, 16, 28);
+
+        if (enemies.every((enemy) => !enemy.alive)) {
+          ctx.fillStyle = '#c7d2fe';
+          ctx.font = '32px Inter, sans-serif';
+          ctx.fillText('You Win! Reload to play again.', 170, size.height / 2);
+          return;
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UBG4U - Unbanned Games</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-logo">UBG4U</span>
+        <p class="brand-tag">Unbanned games ready to play in fullscreen</p>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="games-list">
+        <h1>Choose a game</h1>
+        <div class="cards">
+          <button class="game-card" data-game="games/maze-runner.html">
+            <h2>Maze Runner</h2>
+            <p>Dodge walls, collect stars, and race through the maze.</p>
+          </button>
+          <button class="game-card" data-game="games/space-shooter.html">
+            <h2>Space Shooter</h2>
+            <p>Shoot asteroids and survive as long as you can.</p>
+          </button>
+          <button class="game-card" data-game="games/brick-breaker.html">
+            <h2>Brick Breaker</h2>
+            <p>Break all the bricks with your paddle and ball.</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="game-area">
+        <div class="game-header">
+          <h2 id="selected-game">Pick a game to load</h2>
+          <div>
+            <button id="fullscreenBtn" class="action-btn" disabled>Go Fullscreen</button>
+            <a id="openTabBtn" class="action-link" href="#" target="_blank" rel="noopener noreferrer">Open in New Tab</a>
+          </div>
+        </div>
+        <div class="game-frame" id="gameFrameContainer">
+          <iframe id="gameFrame" src="" title="Game frame"></iframe>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

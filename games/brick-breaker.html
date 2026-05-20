@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brick Breaker</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at top, #081b2f 0%, #04090f 90%);
+        color: #f8fafc;
+        font-family: Inter, sans-serif;
+      }
+      #info {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        color: #7dd3fc;
+        font-size: 14px;
+      }
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">Move with Left/Right arrows. Keep the ball from falling.</div>
+    <canvas id="game"></canvas>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const width = 800;
+      const height = 600;
+      canvas.width = width;
+      canvas.height = height;
+
+      const paddle = { x: width / 2 - 72, y: height - 40, w: 144, h: 16, speed: 8 };
+      const ball = { x: width / 2, y: height - 60, vx: 5, vy: -5, r: 10 };
+      const bricks = [];
+      const rows = 5;
+      const cols = 9;
+      const brickW = 74;
+      const brickH = 22;
+      let score = 0;
+      let gameOver = false;
+      let keys = {};
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          bricks.push({ x: 34 + col * (brickW + 8), y: 60 + row * (brickH + 8), alive: true });
+        }
+      }
+
+      window.addEventListener('keydown', (e) => { keys[e.key] = true; });
+      window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+      function update() {
+        if (keys.ArrowLeft) paddle.x -= paddle.speed;
+        if (keys.ArrowRight) paddle.x += paddle.speed;
+        paddle.x = Math.max(0, Math.min(width - paddle.w, paddle.x));
+
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        if (ball.x < ball.r || ball.x > width - ball.r) ball.vx *= -1;
+        if (ball.y < ball.r) ball.vy *= -1;
+        if (ball.y > height - ball.r) gameOver = true;
+
+        if (
+          ball.x > paddle.x &&
+          ball.x < paddle.x + paddle.w &&
+          ball.y + ball.r > paddle.y &&
+          ball.y - ball.r < paddle.y + paddle.h
+        ) {
+          ball.vy *= -1;
+          ball.y = paddle.y - ball.r;
+        }
+
+        bricks.forEach((brick) => {
+          if (!brick.alive) return;
+          if (
+            ball.x > brick.x &&
+            ball.x < brick.x + brickW &&
+            ball.y - ball.r < brick.y + brickH &&
+            ball.y + ball.r > brick.y
+          ) {
+            brick.alive = false;
+            ball.vy *= -1;
+            score += 15;
+          }
+        });
+      }
+
+      function draw() {
+        ctx.fillStyle = '#040a13';
+        ctx.fillRect(0, 0, width, height);
+
+        bricks.forEach((brick) => {
+          if (!brick.alive) return;
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(brick.x, brick.y, brickW, brickH);
+        });
+
+        ctx.fillStyle = '#22d3ee';
+        ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '18px Inter, sans-serif';
+        ctx.fillText('Score: ' + score, 16, 28);
+
+        if (gameOver) {
+          ctx.fillStyle = '#fde047';
+          ctx.font = '32px Inter, sans-serif';
+          ctx.fillText('Game Over! Refresh to try again.', 180, height / 2);
+          return;
+        }
+
+        if (bricks.every((brick) => !brick.alive)) {
+          ctx.fillStyle = '#a5f3fc';
+          ctx.font = '32px Inter, sans-serif';
+          ctx.fillText('You cleared the wall! Refresh to play again.', 120, height / 2);
+          return;
+        }
+
+        update();
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

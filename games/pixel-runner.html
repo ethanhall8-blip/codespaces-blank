@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Runner</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: linear-gradient(180deg, #08101f 0%, #02050c 100%);
+        color: #f8fafc;
+        font-family: Inter, sans-serif;
+      }
+      #info {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        font-size: 14px;
+        color: #7dd3fc;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">Use Arrow Left/Right to move. Avoid the blocks and keep running.</div>
+    <canvas id="game"></canvas>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const width = 800;
+      const height = 600;
+      canvas.width = width;
+      canvas.height = height;
+
+      const player = { x: width / 2 - 18, y: height - 96, w: 36, h: 48, speed: 7 };
+      const lanes = [140, 260, 380, 500, 620];
+      const obstacles = [];
+      let keys = {};
+      let score = 0;
+      let gameOver = false;
+      let beat = 0;
+
+      window.addEventListener('keydown', (e) => { keys[e.key] = true; });
+      window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+      function spawnObstacle() {
+        const lane = lanes[Math.floor(Math.random() * lanes.length)];
+        obstacles.push({ x: lane, y: -80, w: 60, h: 60, speed: 5 + score * 0.01 });
+      }
+
+      function update() {
+        if (keys.ArrowLeft) player.x -= player.speed;
+        if (keys.ArrowRight) player.x += player.speed;
+        player.x = Math.max(100, Math.min(width - player.w - 100, player.x));
+
+        beat++;
+        if (beat % 90 === 0) spawnObstacle();
+        if (beat % 10 === 0) score += 1;
+
+        obstacles.forEach((obs) => {
+          obs.y += obs.speed;
+        });
+
+        if (obstacles.some((obs) => {
+          return (
+            player.x < obs.x + obs.w &&
+            player.x + player.w > obs.x &&
+            player.y < obs.y + obs.h &&
+            player.y + player.h > obs.y
+          );
+        })) {
+          gameOver = true;
+        }
+
+        if (obstacles.length && obstacles[0].y > height) {
+          obstacles.shift();
+        }
+      }
+
+      function draw() {
+        ctx.fillStyle = '#040b17';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(100, 0, 600, height);
+        ctx.strokeStyle = '#1e3a5f';
+        ctx.lineWidth = 4;
+        for (let i = 1; i < 5; i++) {
+          ctx.beginPath();
+          ctx.moveTo(100 + i * 120, 0);
+          ctx.lineTo(100 + i * 120, height);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = '#22d3ee';
+        ctx.fillRect(player.x, player.y, player.w, player.h);
+
+        obstacles.forEach((obs) => {
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+        });
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '20px Inter, sans-serif';
+        ctx.fillText('Distance: ' + score, 16, 30);
+
+        if (gameOver) {
+          ctx.fillStyle = '#fde047';
+          ctx.font = '32px Inter, sans-serif';
+          ctx.fillText('Game Over! Refresh to try again.', 140, height / 2);
+          return;
+        }
+
+        update();
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

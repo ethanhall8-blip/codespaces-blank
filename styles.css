@@ -54,18 +54,54 @@ body {
 .cards {
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.intro {
+  background: rgba(17, 32, 54, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 24px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  color: #cbd5e1;
+}
+
+.intro p {
+  margin: 0;
+  max-width: 840px;
+  line-height: 1.8;
 }
 
 .game-card {
   border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 20px;
-  padding: 24px;
-  background: linear-gradient(180deg, rgba(17, 29, 50, 0.95), rgba(10, 20, 37, 0.95));
+  border-radius: 24px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(14, 30, 51, 0.96), rgba(8, 18, 32, 0.96));
   color: var(--text);
   text-align: left;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  display: grid;
+  gap: 16px;
+}
+
+.game-card:hover,
+.game-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(16, 42, 72, 0.95), rgba(7, 16, 30, 0.95));
+}
+
+.game-thumb {
+  width: 100%;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.card-copy {
+  display: grid;
+  gap: 8px;
 }
 
 .game-card:hover,

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bubble Pop</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at top, #061528 0%, #02060c 90%);
+        color: #f8fafc;
+        font-family: Inter, sans-serif;
+      }
+      #info {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        font-size: 14px;
+        color: #7dd3fc;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">Click or tap bubbles to pop them. Pop as many as you can before time runs out.</div>
+    <canvas id="game"></canvas>
+    <script>
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const width = 800;
+      const height = 600;
+      canvas.width = width;
+      canvas.height = height;
+
+      const bubbles = [];
+      let score = 0;
+      let timeLeft = 30;
+      let lastSpawn = 0;
+      let lastTime = Date.now();
+      let active = true;
+
+      function spawnBubble() {
+        const radius = Math.random() * 22 + 18;
+        bubbles.push({
+          x: Math.random() * (width - radius * 2) + radius,
+          y: Math.random() * (height - radius * 2) + radius + 60,
+          r: radius,
+          hue: Math.floor(Math.random() * 360)
+        });
+      }
+
+      function updateTimer() {
+        const now = Date.now();
+        const delta = (now - lastTime) / 1000;
+        if (!active) return;
+        lastTime = now;
+        timeLeft = Math.max(0, timeLeft - delta);
+        if (timeLeft <= 0) active = false;
+      }
+
+      canvas.addEventListener('pointerdown', (e) => {
+        if (!active) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * width;
+        const y = ((e.clientY - rect.top) / rect.height) * height;
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+          const bubble = bubbles[i];
+          const dist = Math.hypot(bubble.x - x, bubble.y - y);
+          if (dist < bubble.r) {
+            bubbles.splice(i, 1);
+            score += Math.ceil(30 - bubble.r / 2);
+            break;
+          }
+        }
+      });
+
+      function draw() {
+        ctx.fillStyle = '#020816';
+        ctx.fillRect(0, 0, width, height);
+
+        if (active && Date.now() - lastSpawn > 700) {
+          spawnBubble();
+          lastSpawn = Date.now();
+        }
+
+        bubbles.forEach((bubble) => {
+          ctx.fillStyle = `hsla(${bubble.hue}, 85%, 70%, 0.7)`;
+          ctx.beginPath();
+          ctx.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff22';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '20px Inter, sans-serif';
+        ctx.fillText('Score: ' + score, 16, 30);
+        ctx.fillText('Time: ' + Math.ceil(timeLeft), 16, 58);
+
+        if (!active) {
+          ctx.fillStyle = '#fde047';
+          ctx.font = '32px Inter, sans-serif';
+          ctx.fillText('Time is up! Refresh to play again.', 100, height / 2);
+          return;
+        }
+
+        updateTimer();
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

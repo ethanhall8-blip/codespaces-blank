@@ -28,8 +28,9 @@ function requestFullscreen() {
 gameCards.forEach((card) => {
   card.addEventListener('click', () => {
     const gameUrl = card.dataset.game;
-    const title = card.querySelector('h2').textContent;
+    const title = card.querySelector('h3').textContent;
     loadGame(gameUrl, title);
+    requestFullscreen();
   });
 });
 

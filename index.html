@@ -3,70 +3,151 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UBG4U - Unbanned Games</title>
+    <title>UBG4U Arcade</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="brand">
         <span class="brand-logo">UBG4U</span>
-        <p class="brand-tag">Unblocked games with fast play and fullscreen mode.</p>
+        <p class="brand-tag">Fast, safe, school-friendly games that load instantly.</p>
       </div>
+      <nav class="main-nav">
+        <a href="#games">Games</a>
+        <a href="#features">Why UBG4U</a>
+        <a href="#howto">How it works</a>
+      </nav>
     </header>
 
     <main class="content">
       <section class="hero">
         <div class="hero-copy">
-          <span class="eyebrow">UNBLOCKED GAMES</span>
-          <h1>Play instantly, then jump straight into fullscreen.</h1>
-          <p>Our arcade loads games directly on this page and opens the game area in fullscreen automatically when you tap a tile.</p>
+          <span class="eyebrow">SCHOOL-FRIENDLY ARCADE</span>
+          <h1>Play your favorite unblocked games faster, smoother, and with smart controls.</h1>
+          <p>Jump straight into the action with instant loading, fullscreen support, and an arcade built for safe browsing at school.</p>
+          <div class="hero-actions">
+            <a href="#games" class="primary-btn">Browse Games</a>
+            <button id="toggleAutoFullscreen" class="secondary-btn">Auto fullscreen: On</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-value">5</span>
+            <p>Games ready to play</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">0</span>
+            <p>Ads in gameplay</p>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">100%</span>
+            <p>Fullscreen support</p>
+          </div>
         </div>
       </section>
 
-      <section class="games-list">
+      <section class="features" id="features">
+        <div class="feature-card">
+          <h3>Fast game load</h3>
+          <p>Games launch immediately and stay in full screen for uninterrupted play.</p>
+        </div>
+        <div class="feature-card">
+          <h3>School-safe selection</h3>
+          <p>Every title is curated for friendly gameplay and no surprise redirects.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Easy controls</h3>
+          <p>One click to play, one tap to fullscreen, and clear instructions for each game.</p>
+        </div>
+      </section>
+
+      <section class="game-hub" id="games">
         <div class="games-header">
           <div>
-            <h2>Choose a game</h2>
-            <p class="section-note">Tap any tile to start the game and enter fullscreen right away.</p>
+            <h2>Pick a game to play</h2>
+            <p class="section-note" id="gameCount">5 games available</p>
           </div>
-          <div class="status-pill">Auto fullscreen enabled</div>
+          <div class="search-group">
+            <label class="search-label" for="gameSearch">Search games</label>
+            <input id="gameSearch" type="search" placeholder="Search by title or tag" autocomplete="off" />
+          </div>
         </div>
-        <div class="cards">
-          <button class="game-card" data-game="games/maze-runner.html">
+
+        <div class="cards" id="gameCards">
+          <div class="game-card" data-game="games/maze-runner.html" data-title="Maze Runner" data-desc="Race through the maze with arrow keys and reach the star." data-tags="Adventure,Keyboard">
             <img class="game-thumb" src="images/maze-runner.svg" alt="Maze Runner thumbnail" />
             <div class="card-copy">
-              <h3>Maze Runner</h3>
-              <p>Race through the maze with arrow keys and reach the star.</p>
+              <div class="card-title-group">
+                <h3>Maze Runner</h3>
+                <button class="favorite-btn" aria-label="Add Maze Runner to favorites">☆</button>
+              </div>
+              <p>Navigate twisting paths, avoid traps, and grab the goal before time runs out.</p>
+              <div class="card-meta">
+                <span class="tag">Adventure</span>
+                <span class="rating">★ ★ ★ ★ ☆</span>
+              </div>
             </div>
-          </button>
-          <button class="game-card" data-game="games/space-shooter.html">
+          </div>
+
+          <div class="game-card" data-game="games/space-shooter.html" data-title="Space Shooter" data-desc="Pilot your ship, shoot enemies, and survive the waves." data-tags="Action,Mouse">
             <img class="game-thumb" src="images/space-shooter.svg" alt="Space Shooter thumbnail" />
             <div class="card-copy">
-              <h3>Space Shooter</h3>
-              <p>Pilot your ship, shoot enemies, and survive the waves.</p>
+              <div class="card-title-group">
+                <h3>Space Shooter</h3>
+                <button class="favorite-btn" aria-label="Add Space Shooter to favorites">☆</button>
+              </div>
+              <p>Blast aliens, dodge incoming fire, and keep your ship alive through each wave.</p>
+              <div class="card-meta">
+                <span class="tag">Action</span>
+                <span class="rating">★ ★ ★ ★ ★</span>
+              </div>
             </div>
-          </button>
-          <button class="game-card" data-game="games/brick-breaker.html">
+          </div>
+
+          <div class="game-card" data-game="games/brick-breaker.html" data-title="Brick Breaker" data-desc="Bounce the ball, crush bricks, and stay in the game." data-tags="Puzzle,Keyboard">
             <img class="game-thumb" src="images/brick-breaker.svg" alt="Brick Breaker thumbnail" />
             <div class="card-copy">
-              <h3>Brick Breaker</h3>
-              <p>Bounce the ball, crush bricks, and stay in the game.</p>
+              <div class="card-title-group">
+                <h3>Brick Breaker</h3>
+                <button class="favorite-btn" aria-label="Add Brick Breaker to favorites">☆</button>
+              </div>
+              <p>Control the paddle, keep the ball in play, and clear every brick on the screen.</p>
+              <div class="card-meta">
+                <span class="tag">Puzzle</span>
+                <span class="rating">★ ★ ★ ★ ☆</span>
+              </div>
             </div>
-          </button>
-          <button class="game-card" data-game="games/pixel-runner.html">
+          </div>
+
+          <div class="game-card" data-game="games/pixel-runner.html" data-title="Pixel Runner" data-desc="Dodge obstacles as the runner speeds down the neon track." data-tags="Runner,Keyboard">
             <img class="game-thumb" src="images/pixel-runner.svg" alt="Pixel Runner thumbnail" />
             <div class="card-copy">
-              <h3>Pixel Runner</h3>
-              <p>Dodge obstacles as the runner speeds down the neon track.</p>
+              <div class="card-title-group">
+                <h3>Pixel Runner</h3>
+                <button class="favorite-btn" aria-label="Add Pixel Runner to favorites">☆</button>
+              </div>
+              <p>Keep your reflexes sharp as the pace ramps up on the glowing course.</p>
+              <div class="card-meta">
+                <span class="tag">Runner</span>
+                <span class="rating">★ ★ ★ ★ ☆</span>
+              </div>
             </div>
-          </button>
-          <button class="game-card" data-game="games/bubble-pop.html">
+          </div>
+
+          <div class="game-card" data-game="games/bubble-pop.html" data-title="Bubble Pop" data-desc="Click the bubbles before time runs out to earn points." data-tags="Puzzle,Mouse">
             <img class="game-thumb" src="images/bubble-pop.svg" alt="Bubble Pop thumbnail" />
             <div class="card-copy">
-              <h3>Bubble Pop</h3>
-              <p>Click the bubbles before time runs out to earn points.</p>
+              <div class="card-title-group">
+                <h3>Bubble Pop</h3>
+                <button class="favorite-btn" aria-label="Add Bubble Pop to favorites">☆</button>
+              </div>
+              <p>Pop colorful bubbles fast, build a high score, and beat your best time.</p>
+              <div class="card-meta">
+                <span class="tag">Puzzle</span>
+                <span class="rating">★ ★ ★ ★ ☆</span>
+              </div>
             </div>
-          </button>
+          </div>
         </div>
       </section>
 
@@ -74,15 +155,35 @@
         <div class="game-header">
           <div>
             <h2 id="selected-game">Pick a game to load</h2>
-            <p class="game-subtitle">The game will open inside this frame in fullscreen after selection.</p>
+            <p class="game-subtitle">Select a game card to preview it here and launch it in fullscreen.</p>
           </div>
           <div class="action-group">
             <button id="fullscreenBtn" class="action-btn" disabled>Go Fullscreen</button>
             <a id="openTabBtn" class="action-link" href="#" target="_blank" rel="noopener noreferrer">Open in New Tab</a>
           </div>
         </div>
-        <div class="game-frame" id="gameFrameContainer">
+        <div class="game-preview" id="gameFrameContainer">
           <iframe id="gameFrame" src="" title="Game preview"></iframe>
+          <div class="game-details">
+            <h3>Game details</h3>
+            <p id="selected-game-desc">Choose a game card and the description will appear here.</p>
+            <ul class="game-info" id="selected-game-tags"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="howto" id="howto">
+        <div class="howto-card">
+          <h3>1. Find a game</h3>
+          <p>Use the search bar or browse cards to discover games by genre, control style, or rating.</p>
+        </div>
+        <div class="howto-card">
+          <h3>2. Load instantly</h3>
+          <p>Click a card and the game loads in the preview frame. Fullscreen launches immediately if enabled.</p>
+        </div>
+        <div class="howto-card">
+          <h3>3. Play and enjoy</h3>
+          <p>Use fullscreen mode for the best experience or open the game in a new tab to keep the arcade running.</p>
         </div>
       </section>
     </main>
